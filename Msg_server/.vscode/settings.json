@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "msg.h": "c",
+        "string.h": "c",
+        "ipc.h": "c"
+    }
+}
