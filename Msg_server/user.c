@@ -24,6 +24,7 @@ int main(void)
       {
          int PID;
          char mtext[256];
+         float data;
       } info;
    } mybuf;
 
@@ -31,13 +32,13 @@ int main(void)
 
    key = ftok(pathname, 0);
 
-   if ((msqid = msgget(key, 0666 | IPC_CREAT)) < 0)
+   if ((msqid = msgget(key, 0)) < 0)
    {
       printf("Can\'t get msqid\n");
       exit(-1);
    }
 
-   for (int i = 0; i < 5; i++)
+   for (int i = 0; i < 3; i++)
    {
 
       result = fork();
@@ -58,6 +59,8 @@ int main(void)
 
          mybuf.mtype = 1;
          mybuf.info.PID = getpid();
+         mybuf.info.data = 80 + rand() % 100 + i * 3;
+         printf("I am IPD = %i. Data for server =  %f!\n", mybuf.info.PID, mybuf.info.data);
          //strcpy(mybuf.info.mtext, "This is client with PID = ");
          //len = strlen(mybuf.mtext)+1;
          len = sizeof(mybuf.info);
@@ -79,7 +82,7 @@ int main(void)
             exit(-1);
          }
 
-         printf("I am IPD = %li. Message from server for me obtained! Server IPD = %i\n", mybuf.mtype, mybuf.info.PID);
+         printf("I am IPD = %li. Message from server for me obtained! Server IPD = %i DATA = %f\n", mybuf.mtype, mybuf.info.PID,mybuf.info.data);
 
          return 0;
       }
