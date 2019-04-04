@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <time.h>
 
 int main(int argc, char *argv[], char *envp[])
 {
@@ -51,8 +52,8 @@ int main(int argc, char *argv[], char *envp[])
 
     while ((dir_struct = readdir(dir_ptr)) != NULL)
     {
-        printf("======================\n");
-        printf("File name: %s\n", dir_struct->d_name);
+        printf("||||=====||||===========||||======||||\n");
+        printf("FILE NAME: %s\n", dir_struct->d_name);
         //printf("ARGV %s\n", *argv);
         char cat_buf[256] = "./";
         char cat_buf_add[256] = "/";
@@ -80,9 +81,13 @@ int main(int argc, char *argv[], char *envp[])
         printf("UID: %d \n", stat_buf_p->st_uid);
         printf("GID: %d \n", stat_buf_p->st_gid);
         printf("inode: %ld \n", stat_buf_p->st_ino);
-        printf("last access time: %ld \n", stat_buf_p->st_atime);
-        printf("last modified time: %ld \n", stat_buf_p->st_mtime);
-        printf("last changes time: %ld \n", stat_buf_p->st_ctime);
+        printf("The number of hard links: %ld \n", stat_buf_p->st_nlink);
+        //ctime(time_t timp);
+        //time_t x = stat_buf_p->st_atime;
+        //printf("%s\n", ctime(&x));
+        printf("last access time: %s", ctime(&(stat_buf_p->st_atime)));
+        printf("last modified time: %s", ctime(&(stat_buf_p->st_mtime)));
+        printf("last changes time: %s", ctime(&(stat_buf_p->st_ctime)));
         printf("Size: %ld (bytes)\n\n", stat_buf_p->st_size);
 
         printf("Is it directory? -> ");
@@ -169,7 +174,7 @@ int main(int argc, char *argv[], char *envp[])
             printf("No\n");
         }
 
-        printf("======================\n\n");
+        printf("||||=====||||===========||||======||||\n\n");
     }
 
     if (closedir(dir_ptr) == -1)
