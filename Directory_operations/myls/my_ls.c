@@ -18,7 +18,7 @@ int main(int argc, char *argv[], char *envp[])
 
     if (argc < 2)
     {
-        printf("Argv from user is void. Work in that directory\n\n");
+        printf("Argv from user is void. Work in this directory\n\n");
         argv[1] = "./";
     }
     else
@@ -29,10 +29,61 @@ int main(int argc, char *argv[], char *envp[])
     DIR *dir_ptr = opendir(argv[1]);
     if (dir_ptr == NULL)
     {
-        printf("Error from opendir()\n");
-        exit(-1);
+        //printf("Exception!\n");
+        //system("cd ~");
+        //system("pwd");
+        //system("cd ./../../");
+        //system("pwd");
+        char path[256] = "/";
+        if (chdir(path) == 0)
+        {
+            //system("pwd");
+            dir_ptr = opendir(argv[1]);
+            if (dir_ptr == NULL)
+            {
+                printf("Error from opendir()\n");
+                exit(-1);
+            }
+        }
+        else
+        {
+            printf("Chdir() error!\n");
+            exit(-1);
+        }
     }
+
+    char temp_buf_path[256];
+    strcpy(temp_buf_path, argv[1]);
+    //printf("TEMP: %s\n", temp_buf_path);
+    if (temp_buf_path[0] == '/')
+    {
+        //printf("YES!!!!!!!!!!!\n");
+        char temp_char[256] = ".";
+        strcat(temp_char, temp_buf_path);
+        //printf("now ------ %s\n", temp_char);
+        strcpy(argv[1], temp_char);
+        //printf("now ------ %s\n", argv[1]);
+
+        char path[256] = "/";
+        if (chdir(path) == 0)
+        {
+            //system("pwd");
+            dir_ptr = opendir(argv[1]);
+            if (dir_ptr == NULL)
+            {
+                printf("Error from opendir()\n");
+                exit(-1);
+            }
+        }
+        else
+        {
+            printf("Chdir() error!\n");
+            exit(-1);
+        }
+    }
+
     printf("Open directory -> OK\n\n");
+    //system("pwd");
 
     //struct dirent *dir_struct = readdir(dir_ptr);
     struct dirent *dir_struct = NULL;
